@@ -3,12 +3,101 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:imageLabeler"
+    xmlns:storage="using:Windows.Storage"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <RelativePanel >
+            <Button x:Name="configButton"
+                    Content="Config"
+                    Height="40"
+                    Width="60"
+                    CornerRadius="2"
+                    Margin="10,0,10,0"
+                    RelativePanel.LeftOf="startButton">
+                <Button.Flyout>
+                    <Flyout x:Name="configButtonFlyout"
+                            ShowMode="Transient">
+                        <Grid Width="400"
+                              Height="140">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="60"/>
+                                <RowDefinition Height="80"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock  x:Name="folderPathTextBlock"
+                                        Text="Path not set"
+                                        FontWeight="ExtraLight"
+                                        Height="20"
+                                        Grid.ColumnSpan="2"
+                                        VerticalAlignment="Center"></TextBlock>
+                            <Button x:Name="folderPathBrowseButton"
+                                    Content="Browse"
+                                    Click="browseButton_Click"
+                                    Grid.Column="2"
+                                    CornerRadius="2"
+                                    Margin="5,0,5,0"></Button>
+                            <muxc:NumberBox x:Name="pointsCountNumberBox"
+                                            Text="{x:Bind pointsCount,Mode=TwoWay}"
+                                            Header="No of points"
+                                            Grid.Row="1"
+                                            Width="80"
+                                            Height="100"
+                                            SpinButtonPlacementMode="Compact"
+                                            Minimum="0"
+                                            HorizontalAlignment="Left"></muxc:NumberBox>
+                            <CheckBox x:Name="isDrawModeCheckBox"
+                                      Content="Enable Draw Mode"
+                                      IsChecked="{x:Bind isDrawMode ,Mode=TwoWay}"
+                                      Margin="20,0,0,0"
+                                      VerticalAlignment="Center"
+                                      Grid.Row="1"
+                                      Grid.Column="1"
+                                      Grid.ColumnSpan="2"></CheckBox>
+                        </Grid>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+            <Button x:Name="startButton"
+                    Content="Start"
+                       Width="60"
+                       Height="40"
+                    Visibility="Visible"
+                       RelativePanel.AlignHorizontalCenterWithPanel="True"
+                    Click="startButton_Click"></Button>
+            <Button x:Name="saveButton"
+                    Content="Save"
+                    Height="40"
+                    Width="60"
+                    RelativePanel.RightOf="startButton"
+                    CornerRadius="2"
+                    Margin="10,0,10,0"
+                    IsEnabled="False"></Button>
+        </RelativePanel>
+        <FlipView ItemsSource="{x:Bind sampleList}"
+                  Grid.Row="1"
+                  Width="500"
+                  Height="500">
+            <FlipView.ItemTemplate>
+                <DataTemplate x:DataType="local:SampleData">
+                    <local:WorkSpaceControl CurrentSampleData="{x:Bind SampleDataHandle}"
+                                            Width="500"
+                                            Height="500"></local:WorkSpaceControl>
+                </DataTemplate>
+            </FlipView.ItemTemplate>
+            
+        </FlipView>
     </Grid>
 </Page>

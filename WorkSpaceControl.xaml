@@ -8,8 +8,14 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-
-    <Canvas x:Name="WorkSpaceCanvas"
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="40"/>
+        </Grid.ColumnDefinitions>
+        <Canvas x:Name="WorkSpaceCanvas"
+                Grid.Column="1"
             Width="500"
             Height="500"
             Background="Azure"
@@ -19,4 +25,14 @@
             Loaded="WorkSpaceCanvas_Loaded">
         <Image x:Name="WorkSpaceBgImage"></Image>
     </Canvas>
+    <Button x:Name="LeftNavButton"
+                Grid.Column="0"
+            Click="LeftNavButton_Click"
+            VerticalAlignment="Center"></Button>
+
+    <Button x:Name="RightNavButton"
+                Grid.Column="2"
+                Click="RightNavButton_Click"
+            VerticalAlignment="Center"></Button>
+    </Grid>
 </UserControl>

@@ -34,10 +34,11 @@
                  PointerExited="vertex_PointerExited"
                  PointerPressed="freeVertex_PointerPressed"
                  ></Rectangle>
-        <TextBox x:Name="label"
+        <TextBox x:Name="LabelTextBox"
                    Foreground="Orange"
                    Width="60"
-                   Height="20"
-                   Text="hello"></TextBox>
+                   Height="16"
+                   Text="hello"
+                 TextChanged="LabelTextBox_TextChanged"></TextBox>
     </Canvas>
 </UserControl>

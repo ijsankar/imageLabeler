@@ -11,15 +11,12 @@ namespace imageLabeler
     public class SampleData
     {
         public StorageFile File { get; set; }
-        public SampleData SampleDataHandle { get
-            {
-                return this;
-            }
-        }
-        public List<Tuple<String, double, double, double, double, String>> SampleBoundsList;
-        public SampleData(StorageFile file)
+       
+        public List<Tuple<double, double, double, double, String>> SampleBoundsList;
+        public SampleData(StorageFile file, List<Tuple<double, double, double, double, String>> SampleBoundsList)
         {
             File = file;
+            this.SampleBoundsList = SampleBoundsList;
         }
     }
 }

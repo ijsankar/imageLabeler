@@ -10,19 +10,20 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <RelativePanel >
+        <RelativePanel>
             <Button x:Name="configButton"
                     Content="Config"
                     Height="40"
                     Width="60"
                     CornerRadius="2"
                     Margin="10,0,10,0"
-                    RelativePanel.LeftOf="startButton">
+                    RelativePanel.LeftOf="startButton"
+                    >
                 <Button.Flyout>
                     <Flyout x:Name="configButtonFlyout"
                             ShowMode="Transient">
@@ -35,10 +36,11 @@
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="60"/>
+                                <RowDefinition Height="60"/>
                                 <RowDefinition Height="80"/>
                             </Grid.RowDefinitions>
                             <TextBlock  x:Name="folderPathTextBlock"
-                                        Text="Path not set"
+                                        Text="Image Folder not set"
                                         FontWeight="ExtraLight"
                                         Height="20"
                                         Grid.ColumnSpan="2"
@@ -49,10 +51,24 @@
                                     Grid.Column="2"
                                     CornerRadius="2"
                                     Margin="5,0,5,0"></Button>
+                            <TextBlock  x:Name="CSVPathTextBlock"
+                                        Text="CSV file not set"
+                                        FontWeight="ExtraLight"
+                                        Height="20"
+                                        Grid.ColumnSpan="2"
+                                        Grid.Row="1"
+                                        VerticalAlignment="Center"></TextBlock>
+                            <Button x:Name="CSVPathBrowseButton"
+                                    Content="Browse"
+                                    Click="CSVPathBrowseButton_Click"
+                                    Grid.Column="2"
+                                    Grid.Row="1"
+                                    CornerRadius="2"
+                                    Margin="5,0,5,0"></Button>
                             <muxc:NumberBox x:Name="pointsCountNumberBox"
                                             Text="{x:Bind pointsCount,Mode=TwoWay}"
                                             Header="No of points"
-                                            Grid.Row="1"
+                                            Grid.Row="2"
                                             Width="80"
                                             Height="100"
                                             SpinButtonPlacementMode="Compact"
@@ -63,7 +79,7 @@
                                       IsChecked="{x:Bind isDrawMode ,Mode=TwoWay}"
                                       Margin="20,0,0,0"
                                       VerticalAlignment="Center"
-                                      Grid.Row="1"
+                                      Grid.Row="2"
                                       Grid.Column="1"
                                       Grid.ColumnSpan="2"></CheckBox>
                         </Grid>
@@ -74,30 +90,18 @@
                     Content="Start"
                        Width="60"
                        Height="40"
-                    Visibility="Visible"
+                       IsEnabled="False"
                        RelativePanel.AlignHorizontalCenterWithPanel="True"
                     Click="startButton_Click"></Button>
-            <Button x:Name="saveButton"
+            <Button x:Name="SaveButton"
                     Content="Save"
                     Height="40"
                     Width="60"
                     RelativePanel.RightOf="startButton"
                     CornerRadius="2"
                     Margin="10,0,10,0"
-                    IsEnabled="False"></Button>
+                    IsEnabled="False"
+                    Click="SaveButton_Click"></Button>
         </RelativePanel>
-        <FlipView ItemsSource="{x:Bind sampleList}"
-                  Grid.Row="1"
-                  Width="500"
-                  Height="500">
-            <FlipView.ItemTemplate>
-                <DataTemplate x:DataType="local:SampleData">
-                    <local:WorkSpaceControl CurrentSampleData="{x:Bind SampleDataHandle}"
-                                            Width="500"
-                                            Height="500"></local:WorkSpaceControl>
-                </DataTemplate>
-            </FlipView.ItemTemplate>
-            
-        </FlipView>
     </Grid>
 </Page>

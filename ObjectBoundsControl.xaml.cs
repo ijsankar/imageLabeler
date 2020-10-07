@@ -22,14 +22,17 @@ namespace imageLabeler
     {
         private int r = 8;
         private WorkSpaceControl parent;
+        public string Label;
+        public double h;
+        public double w;
         public ObjectBoundsControl(WorkSpaceControl parent, double width =0, double height = 0, String label="")
         {
             this.InitializeComponent();
             this.parent = parent;
-            Resize(width, height);
+            ResizeFreeVertex(width, height);
             Rename(label);
         }
-        public void Resize(double width, double height)
+        public void ResizeFreeVertex(double width, double height)
         {
             if (width<r)
             {
@@ -40,21 +43,22 @@ namespace imageLabeler
                 height = r;
             }
             box.Width = width;
+            w = width;
             box.Height = height;
+            h = height;
             Canvas.SetLeft(freeVertex, width-r);
             Canvas.SetTop(freeVertex, height-r);
-            Canvas.SetLeft(label, (width - label.Width) / 2);
-            Canvas.SetTop(label, (height - label.Height) / 2);
+            Canvas.SetLeft(LabelTextBox, (width - LabelTextBox.Width) / 2);
+            Canvas.SetTop(LabelTextBox, (height - LabelTextBox.Height) / 2);
         }
+        //public void ResizeRootVertex(double x, double y)
+
         public void Rename(String s)
         {
-            label.Text = s;
+            LabelTextBox.Text = s;
         }
 
-        public Tuple<double,double,String> GetBoundData()
-        {
-            return Tuple.Create(box.Width, box.Height, label.Text);
-        }
+        
         private void vertex_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             Windows.UI.Xaml.Shapes.Rectangle r = sender as Windows.UI.Xaml.Shapes.Rectangle;
@@ -77,6 +81,13 @@ namespace imageLabeler
         {
             parent.IsFreePointerPressed = true;
             parent.obc = this;
+        }
+
+        private void LabelTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            parent.obc = this;
+            Label = LabelTextBox.Text;
+            parent.saveData();
         }
     }
 }

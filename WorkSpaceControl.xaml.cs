@@ -106,8 +106,8 @@ namespace imageLabeler
 
         public void MoveObjectBoundsControl(double x, double y)
         {
-            Canvas.SetTop(obc, y);
-            Canvas.SetLeft(obc, x);
+            Canvas.SetTop(obc, y>=0?y:0);
+            Canvas.SetLeft(obc, x>=0?x:0);
         }
         private async Task SetWorkSpaceCanvasBg()
         {

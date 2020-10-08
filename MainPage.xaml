@@ -29,7 +29,7 @@
                     <Flyout x:Name="configButtonFlyout"
                             ShowMode="Transient">
                         <Grid Width="400"
-                              Height="140">
+                              Height="180">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="100"/>
                                 <ColumnDefinition Width="220"/>

@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -29,6 +31,9 @@ namespace imageLabeler
         private int dataSize;
         private List<SampleData> sampleList;
         private List<ObjectBoundsControl> dataObjectList;
+        private int currentBitmapWidth;
+        private int currentBitmapHeight;
+        private double shrinkRatio = 1;
         public WorkSpaceControl(ref List<SampleData> sampleDataList)
         {
             this.InitializeComponent();
@@ -36,7 +41,14 @@ namespace imageLabeler
             dataSize = sampleDataList.Count;
             NewSample();
         }
-        private void NewSample()
+        private async void NewSample()
+        {
+            await SetWorkSpaceCanvasBg();
+            SetNavButtonsVisibility();
+            ShowBounds();
+        }
+
+        private void ShowBounds()
         {
             if (dataObjectList != null)
             {
@@ -46,16 +58,44 @@ namespace imageLabeler
                 }
             }
             dataObjectList = new List<ObjectBoundsControl>();
+            //Debug.WriteLine("renderedimagewidth=" + WorkSpaceBgImage.ActualWidth);
+            //Debug.WriteLine("imagewidth=" + WorkSpaceBgImage.Width);
+            //Debug.WriteLine("canvasrendwidth=" + WorkSpaceCanvas.ActualWidth);
+            //Debug.WriteLine("canvasrendheight=" + WorkSpaceCanvas.ActualHeight);
+            //Debug.WriteLine("canvaswidth=" + WorkSpaceCanvas.Width);
+            //Debug.WriteLine("gridwidth=" + WorkSpaceGrid.Width);
+            //Debug.WriteLine("gridrendwidth=" + WorkSpaceGrid.ActualWidth);
+            //Debug.WriteLine("gridrendheigth=" + WorkSpaceGrid.ActualHeight);
+            GetShrinkRatio();
             foreach (var t in sampleList[sampleDataIndex].SampleBoundsList)
             {
-                var x = t.Item1;
-                var y = t.Item2;
-                var w = t.Item3-x;
-                var h = t.Item4-y;
+                var x = t.Item1 / shrinkRatio;
+                var y = t.Item2 / shrinkRatio;
+                var w = t.Item3 / shrinkRatio - x;
+                var h = t.Item4 / shrinkRatio - y;
                 var s = t.Item5;
                 AddObjectBoundsControl(x, y, w, h, s);
             }
         }
+        private void GetShrinkRatio()
+        {
+            var w = WorkSpaceGrid.ActualWidth-80;
+            var h = WorkSpaceGrid.ActualHeight;
+            Debug.WriteLine(w);
+            Debug.WriteLine(h);
+
+            if ((w/h)< (currentBitmapWidth / currentBitmapHeight))
+            {
+                shrinkRatio = currentBitmapWidth / w;
+                Debug.WriteLine("yes");
+            }
+            else
+            {
+                shrinkRatio = currentBitmapHeight / h;
+            }
+            Debug.WriteLine(shrinkRatio);
+        }
+
         public void AddObjectBoundsControl(double x, double y, double w =0, double h =0 ,string s ="")
         {
             obc = new ObjectBoundsControl(this,w,h,s);
@@ -69,16 +109,21 @@ namespace imageLabeler
             Canvas.SetTop(obc, y);
             Canvas.SetLeft(obc, x);
         }
-        private async void SetWorkSpaceCanvasBg()
+        private async Task SetWorkSpaceCanvasBg()
         {
             using (var stream = await sampleList[sampleDataIndex].File.OpenReadAsync())
             {
                 var bitmapImage = new BitmapImage();
-                bitmapImage.DecodePixelHeight = 500;
-                bitmapImage.DecodePixelWidth = 500;
+                WorkSpaceBgImage.Width = WorkSpaceGrid.Width;
+                WorkSpaceBgImage.Height = WorkSpaceGrid.Height;
+                shrinkRatio = bitmapImage.PixelWidth;
                 await bitmapImage.SetSourceAsync(stream);
+                //Debug.WriteLine("pixelwidth=" + bitmapImage.PixelWidth.ToString());
+                currentBitmapWidth = bitmapImage.PixelWidth;
+                currentBitmapHeight = bitmapImage.PixelHeight;
                 WorkSpaceBgImage.Source = bitmapImage;
             }
+            
         }
         private void SetNavButtonsVisibility()
         {
@@ -135,44 +180,45 @@ namespace imageLabeler
             
         }
 
-        private void WorkSpaceCanvas_Loaded(object sender, RoutedEventArgs e)
-        {
-            SetWorkSpaceCanvasBg();
-            SetNavButtonsVisibility();
-        }
-
+        
         private void RightNavButton_Click(object sender, RoutedEventArgs e)
         {
-            if (dataObjectList.Count!=0)
-            {
-              //  saveData();
-            }
-            sampleDataIndex += 1;
-            SetWorkSpaceCanvasBg();
-            SetNavButtonsVisibility();
-            NewSample();
+            NavigateToNextWS();
         }
 
+        public void NavigateToNextWS()
+        {
+            if (sampleDataIndex<dataSize-1)
+            {
+                sampleDataIndex += 1;
+                
+                NewSample();
+            }
+        }
         private void LeftNavButton_Click(object sender, RoutedEventArgs e)
         {
-            if (dataObjectList.Count != 0)
-            {
-               // saveData();
-            }
-            sampleDataIndex -= 1;
-            SetWorkSpaceCanvasBg();
-            SetNavButtonsVisibility();
-            NewSample();
+            NavigateToPrevWS();
         }
-
+        public void NavigateToPrevWS()
+        {
+            if (sampleDataIndex > 0)
+            {
+                sampleDataIndex -= 1;
+                
+                NewSample();
+            }
+        }
         
         public void saveData()
         {
-            var x = Canvas.GetLeft(obc);
-            var y = Canvas.GetTop(obc);
-            var w = obc.w+x;
-            var h = obc.h+y;
-            var s = obc.Label;
+            var x = Canvas.GetLeft(obc)*shrinkRatio;
+            var y = Canvas.GetTop(obc) * shrinkRatio;
+            Debug.WriteLine("y1=" + Canvas.GetLeft(obc));
+            Debug.WriteLine("yh=" + obc.h);
+            var w = x+obc.w * shrinkRatio;
+            var h = y+obc.h * shrinkRatio;
+            Debug.WriteLine("y2=" + h);
+            var s = obc.Label==null?"":obc.Label;
             var t = Tuple.Create(x, y, w, h, s);
             var obcIndex = dataObjectList.FindIndex(item=>item==obc);
             var list = sampleList[sampleDataIndex].SampleBoundsList;
@@ -184,6 +230,37 @@ namespace imageLabeler
             {
                 list[obcIndex] = t;
             }
+        }
+        public void DeleteOBC()
+        {
+            var obcIndex = dataObjectList.FindIndex(item => item == obc);
+            var list = sampleList[sampleDataIndex].SampleBoundsList;
+            list.RemoveAt(obcIndex);
+            dataObjectList.RemoveAt(obcIndex);
+            WorkSpaceCanvas.Children.Remove(obc);
+            this.obc = null;
+        }
+
+        private void WorkSpaceCanvas_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            var key = e.Key;
+            if ((key == Windows.System.VirtualKey.Left)&(sampleDataIndex > 0))
+            {
+                NavigateToPrevWS();
+                
+            }
+            else if((key == Windows.System.VirtualKey.Right)&(sampleDataIndex<dataSize-1))
+            {
+                NavigateToNextWS();
+            }
+            
+        }
+
+        private void WorkSpaceBgImage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            WorkSpaceCanvas.Width = WorkSpaceBgImage.ActualWidth;
+            WorkSpaceCanvas.Height = WorkSpaceBgImage.ActualHeight;
+            ShowBounds();
         }
     }
 }

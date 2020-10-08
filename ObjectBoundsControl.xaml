@@ -15,7 +15,8 @@
                  Height="{x:Bind r}"
                  Canvas.Left="0"
                  Canvas.Top="0"
-                 Fill="Cyan"
+                 Fill="White"
+                   Stroke="black"
                  Opacity="20"
                  PointerEntered="vertex_PointerEntered"
                  PointerExited="vertex_PointerExited"
@@ -24,21 +25,46 @@
                    Canvas.Left="0"
                    Canvas.Top="0"
                    StrokeDashArray="1 6"
-                   Stroke="Blue"></Rectangle>
+                   Stroke="Red"></Rectangle>
         <Rectangle x:Name="freeVertex"
                  Width="{x:Bind r}"
                  Height="{x:Bind r}"
-                 Fill="Cyan"
+                 Fill="White"
+                 Stroke="Black"
                  Opacity="20"
                  PointerEntered="vertex_PointerEntered"
                  PointerExited="vertex_PointerExited"
                  PointerPressed="freeVertex_PointerPressed"
                  ></Rectangle>
-        <TextBox x:Name="LabelTextBox"
-                   Foreground="Orange"
+        <RelativePanel x:Name="LabelRelativePanel"
+                       Height="20"
+                       Width="60">
+            <TextBox x:Name="LabelTextBox"
+                     IsColorFontEnabled="False"
+                     Background="white"
+                     Foreground="black"
                    Width="60"
-                   Height="16"
+                   Height="20"
                    Text="hello"
+                     VerticalContentAlignment="Center"
+                     VerticalAlignment="Center"
+                     RelativePanel.AlignVerticalCenterWithPanel="True"
                  TextChanged="LabelTextBox_TextChanged"></TextBox>
+            <Button x:Name="DeleteButton"
+                    RelativePanel.AlignRightWithPanel="True"
+                    RelativePanel.AlignVerticalCenterWithPanel="True"
+                    Height="18"
+                    Background="red"
+                    Foreground="White"
+                    Width="18"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Padding="0"
+                    Click="DeleteButton_Click">
+                <SymbolIcon Symbol="Clear"
+                            ></SymbolIcon>
+            </Button>
+        </RelativePanel>
+        
     </Canvas>
 </UserControl>

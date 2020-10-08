@@ -149,5 +149,22 @@ namespace imageLabeler
                 writer.Close();
             }
         }
+
+        private void MainGrid_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            var key = e.Key;
+            foreach (var wsc in MainGrid.Children.OfType<WorkSpaceControl>())
+            {
+                if (key==Windows.System.VirtualKey.Left)
+                {
+                    wsc.NavigateToPrevWS();
+                }
+                else if(key == Windows.System.VirtualKey.Right)
+                {
+                    wsc.NavigateToNextWS();
+                }
+            }
+            
+        }
     }
 }

@@ -48,8 +48,8 @@ namespace imageLabeler
             h = height;
             Canvas.SetLeft(freeVertex, width-r);
             Canvas.SetTop(freeVertex, height-r);
-            Canvas.SetLeft(LabelTextBox, (width - LabelTextBox.Width) / 2);
-            Canvas.SetTop(LabelTextBox, (height - LabelTextBox.Height) / 2);
+            Canvas.SetLeft(LabelRelativePanel, (width - LabelTextBox.Width) / 2);
+            Canvas.SetTop(LabelRelativePanel, (height - LabelTextBox.Height) / 2);
         }
         //public void ResizeRootVertex(double x, double y)
 
@@ -88,6 +88,12 @@ namespace imageLabeler
             parent.obc = this;
             Label = LabelTextBox.Text;
             parent.saveData();
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            parent.obc = this;
+            parent.DeleteOBC();
         }
     }
 }

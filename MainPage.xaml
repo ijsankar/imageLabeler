@@ -11,7 +11,8 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid x:Name="MainGrid"
-          KeyDown="MainGrid_KeyDown">
+          KeyDown="MainGrid_KeyDown"
+          >
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>

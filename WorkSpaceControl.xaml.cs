@@ -58,6 +58,7 @@ namespace imageLabeler
                 }
             }
             dataObjectList = new List<ObjectBoundsControl>();
+            #region
             //Debug.WriteLine("renderedimagewidth=" + WorkSpaceBgImage.ActualWidth);
             //Debug.WriteLine("imagewidth=" + WorkSpaceBgImage.Width);
             //Debug.WriteLine("canvasrendwidth=" + WorkSpaceCanvas.ActualWidth);
@@ -66,6 +67,7 @@ namespace imageLabeler
             //Debug.WriteLine("gridwidth=" + WorkSpaceGrid.Width);
             //Debug.WriteLine("gridrendwidth=" + WorkSpaceGrid.ActualWidth);
             //Debug.WriteLine("gridrendheigth=" + WorkSpaceGrid.ActualHeight);
+            #endregion
             GetShrinkRatio();
             foreach (var t in sampleList[sampleDataIndex].SampleBoundsList)
             {
@@ -106,8 +108,14 @@ namespace imageLabeler
 
         public void MoveObjectBoundsControl(double x, double y)
         {
+            
             Canvas.SetTop(obc, y>=0?y:0);
             Canvas.SetLeft(obc, x>=0?x:0);
+        }
+        public void ResizeRootVertex(double x, double y)
+        {
+            obc.ResizeFreeVertex(obc.w + Canvas.GetLeft(obc) - x, obc.h + Canvas.GetTop(obc) - y);
+            MoveObjectBoundsControl(x, y);
         }
         private async Task SetWorkSpaceCanvasBg()
         {
@@ -116,9 +124,7 @@ namespace imageLabeler
                 var bitmapImage = new BitmapImage();
                 WorkSpaceBgImage.Width = WorkSpaceGrid.Width;
                 WorkSpaceBgImage.Height = WorkSpaceGrid.Height;
-                shrinkRatio = bitmapImage.PixelWidth;
                 await bitmapImage.SetSourceAsync(stream);
-                //Debug.WriteLine("pixelwidth=" + bitmapImage.PixelWidth.ToString());
                 currentBitmapWidth = bitmapImage.PixelWidth;
                 currentBitmapHeight = bitmapImage.PixelHeight;
                 WorkSpaceBgImage.Source = bitmapImage;
@@ -161,7 +167,7 @@ namespace imageLabeler
                 if (IsRootPointerPressed)
                 {
                     var point = e.GetCurrentPoint(WorkSpaceCanvas).RawPosition;
-                    MoveObjectBoundsControl(point.X, point.Y);
+                    ResizeRootVertex(point.X, point.Y);
                 }
                 else
                 {
@@ -177,7 +183,6 @@ namespace imageLabeler
             IsRootPointerPressed = false;
             IsFreePointerPressed = false;
             saveData();
-            
         }
 
         
@@ -191,7 +196,6 @@ namespace imageLabeler
             if (sampleDataIndex<dataSize-1)
             {
                 sampleDataIndex += 1;
-                
                 NewSample();
             }
         }
@@ -204,7 +208,6 @@ namespace imageLabeler
             if (sampleDataIndex > 0)
             {
                 sampleDataIndex -= 1;
-                
                 NewSample();
             }
         }
@@ -213,7 +216,7 @@ namespace imageLabeler
         {
             var x = Canvas.GetLeft(obc)*shrinkRatio;
             var y = Canvas.GetTop(obc) * shrinkRatio;
-            Debug.WriteLine("y1=" + Canvas.GetLeft(obc));
+            Debug.WriteLine("y1=" + Canvas.GetTop(obc));
             Debug.WriteLine("yh=" + obc.h);
             var w = x+obc.w * shrinkRatio;
             var h = y+obc.h * shrinkRatio;
@@ -247,13 +250,11 @@ namespace imageLabeler
             if ((key == Windows.System.VirtualKey.Left)&(sampleDataIndex > 0))
             {
                 NavigateToPrevWS();
-                
             }
             else if((key == Windows.System.VirtualKey.Right)&(sampleDataIndex<dataSize-1))
             {
                 NavigateToNextWS();
             }
-            
         }
 
         private void WorkSpaceBgImage_SizeChanged(object sender, SizeChangedEventArgs e)

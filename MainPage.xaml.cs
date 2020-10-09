@@ -163,6 +163,7 @@ namespace imageLabeler
                 {
                     wsc.NavigateToNextWS();
                 }
+                break;
             }
             
         }

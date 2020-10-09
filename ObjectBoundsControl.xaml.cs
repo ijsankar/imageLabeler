@@ -46,6 +46,10 @@ namespace imageLabeler
             w = width;
             box.Height = height;
             h = height;
+            Debug.WriteLine("box");
+            Debug.WriteLine(box.ActualHeight);
+            Debug.WriteLine(box.Height);
+            Debug.WriteLine(box.Width);
             Canvas.SetLeft(freeVertex, width-r);
             Canvas.SetTop(freeVertex, height-r);
             Canvas.SetLeft(LabelRelativePanel, (width - LabelTextBox.Width) / 2);

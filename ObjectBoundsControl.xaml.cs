@@ -59,7 +59,7 @@ namespace imageLabeler
 
         public void Rename(String s)
         {
-            LabelTextBox.Text = s;
+            LabelTextBox.Text = s=="nil"?"":s;
         }
 
         

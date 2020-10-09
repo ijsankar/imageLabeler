@@ -221,7 +221,7 @@ namespace imageLabeler
             var w = x+obc.w * shrinkRatio;
             var h = y+obc.h * shrinkRatio;
             Debug.WriteLine("y2=" + h);
-            var s = obc.Label==null?"":obc.Label;
+            var s = obc.Label==null?"nil":obc.Label;
             var t = Tuple.Create(x, y, w, h, s);
             var obcIndex = dataObjectList.FindIndex(item=>item==obc);
             var list = sampleList[sampleDataIndex].SampleBoundsList;

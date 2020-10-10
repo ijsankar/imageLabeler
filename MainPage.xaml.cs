@@ -23,6 +23,7 @@ namespace imageLabeler
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+    
     public sealed partial class MainPage : Page
     {
         public List<SampleData> SampleList;
@@ -40,7 +41,7 @@ namespace imageLabeler
         private async void browseButton_Click(object sender, RoutedEventArgs e)
         {
             var picker = new FolderPicker();
-            picker.CommitButtonText = "Select Data Location";
+            picker.CommitButtonText = "Select Folder";
             picker.SuggestedStartLocation = PickerLocationId.Desktop;
             picker.FileTypeFilter.Add("*");
             StorageFolder folder = await picker.PickSingleFolderAsync();
@@ -68,9 +69,10 @@ namespace imageLabeler
         }
         private async Task  GetSampleListAsync()
         {
+            string[] extList = { ".jpg", ".png", ".jpeg", ".jfif",".bmp" };
             foreach (var item in await dataFolder.GetFilesAsync(Windows.Storage.Search.CommonFileQuery.OrderByName))
             {
-                if (item.FileType==".jpg")
+                if (extList.Contains(item.FileType))
                 {
                     SampleList.Add(new SampleData(item, await GetSampleDataFromCSV(item.Name)));
                 }
@@ -80,7 +82,7 @@ namespace imageLabeler
         private async void CSVPathBrowseButton_Click(object sender, RoutedEventArgs e)
         {
             var picker = new FileOpenPicker();
-            picker.CommitButtonText = "select CSV file";
+            picker.CommitButtonText = "select csv file";
             picker.FileTypeFilter.Add(".csv");
             CSVFile=await picker.PickSingleFileAsync();
         }

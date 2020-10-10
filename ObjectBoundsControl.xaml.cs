@@ -46,16 +46,11 @@ namespace imageLabeler
             w = width;
             box.Height = height;
             h = height;
-            Debug.WriteLine("box");
-            Debug.WriteLine(box.ActualHeight);
-            Debug.WriteLine(box.Height);
-            Debug.WriteLine(box.Width);
             Canvas.SetLeft(freeVertex, width-r);
             Canvas.SetTop(freeVertex, height-r);
             Canvas.SetLeft(LabelRelativePanel, (width - LabelTextBox.Width) / 2);
             Canvas.SetTop(LabelRelativePanel, (height - LabelTextBox.Height) / 2);
         }
-        //public void ResizeRootVertex(double x, double y)
 
         public void Rename(String s)
         {

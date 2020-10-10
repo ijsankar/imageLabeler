@@ -28,7 +28,7 @@
                     >
                 <Button.Flyout>
                     <Flyout x:Name="configButtonFlyout"
-                            ShowMode="Transient">
+                            ShowMode="Standard">
                         <Grid Width="400"
                               Height="180">
                             <Grid.ColumnDefinitions>
@@ -42,8 +42,9 @@
                                 <RowDefinition Height="80"/>
                             </Grid.RowDefinitions>
                             <TextBlock  x:Name="folderPathTextBlock"
-                                        Text="Image Folder not set"
+                                        Text="Image folder not set"
                                         FontWeight="ExtraLight"
+                                        Foreground="DarkGray"
                                         Height="20"
                                         Grid.ColumnSpan="2"
                                         VerticalAlignment="Center"></TextBlock>
@@ -54,8 +55,9 @@
                                     CornerRadius="2"
                                     Margin="5,0,5,0"></Button>
                             <TextBlock  x:Name="CSVPathTextBlock"
-                                        Text="CSV file not set"
+                                        Text="csv file not set (optional)"
                                         FontWeight="ExtraLight"
+                                        Foreground="DarkGray"
                                         Height="20"
                                         Grid.ColumnSpan="2"
                                         Grid.Row="1"

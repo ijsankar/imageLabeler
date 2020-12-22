@@ -101,14 +101,7 @@ namespace imageLabeler
                 if (sample.Contains(fileName))
                 {
                     var x = sample.Split(",");
-                    int i = 1;
-                    while(i<x.Length)
-                    {
-                        l.Add(Tuple.Create(double.Parse(x[i]), double.Parse(x[i + 1]), double.Parse(x[i + 2]), double.Parse(x[i + 3]),x[i + 4]));
-                        i += 5;
-                    }
-                    CSVReader.Close();
-                    return l;
+                    l.Add(Tuple.Create(double.Parse(x[1]), double.Parse(x[2]), double.Parse(x[3]), double.Parse(x[4]),x[5]));
                 } 
             }
             CSVReader.Close();
@@ -134,18 +127,19 @@ namespace imageLabeler
                 {
                     if (sample.SampleBoundsList.Count>0)
                     {
-                        var l = new List<string>();
-                        l.Add(sample.File.Name);
                         foreach (var data in sample.SampleBoundsList)
                         {
+                            var l = new List<string>();
+                            l.Add(sample.File.Name);
                             l.Add(data.Item1.ToString());
                             l.Add(data.Item2.ToString());
                             l.Add(data.Item3.ToString());
                             l.Add(data.Item4.ToString());
                             l.Add(data.Item5);
+                            var s = String.Join(',', l);
+                            writer.WriteLine(s);
                         }
-                        var s = String.Join(',', l);
-                        writer.WriteLine(s);
+                        
                     }
                 }
                 writer.Close();

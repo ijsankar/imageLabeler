@@ -82,17 +82,72 @@ namespace imageLabeler
             parent.obc = this;
         }
 
-        private void LabelTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            parent.obc = this;
-            Label = LabelTextBox.Text;
-            parent.saveData();
-        }
+        //private void LabelTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    var suitableItems = new List<string>();
+        //    var splitText = LabelTextBox.Text.ToLower().Split(" ");
+        //    foreach (var cat in parent.classes)
+        //    {
+        //        var found = splitText.All((key) =>
+        //        {
+        //            return cat.ToLower().Contains(key);
+        //        });
+        //        if (found)
+        //        {
+        //            suitableItems.Add(cat);
+        //        }
+        //    }
+        //    if (suitableItems.Count == 0)
+        //    {
+        //        suitableItems.Add("");
+        //    }
+        //    LabelTextBox.ItemsSource = suitableItems;
+
+        //    parent.obc = this;
+        //    Label = LabelTextBox.Text;
+        //    parent.saveData();
+        //}
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             parent.obc = this;
             parent.DeleteOBC();
+        }
+
+        private void LabelTextBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            parent.obc = this;
+            Label = (string) args.SelectedItem;
+            parent.saveData();
+        }
+
+        private void LabelTextBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput){
+                var suitableItems = new List<string>();
+                var splitText = LabelTextBox.Text.ToLower().Split("");
+                foreach (var item in parent.classes)
+                {
+                    var found = splitText.All((key) =>
+                    {
+                        return item.ToLower().Contains(key);
+                    });
+                    if (found)
+                    {
+                        suitableItems.Add(item);
+                    }
+                }
+                if (suitableItems.Count == 0)
+                {
+                    suitableItems.Add("");
+                }
+                LabelTextBox.ItemsSource = suitableItems;
+
+                parent.obc = this;
+                Label = LabelTextBox.Text;
+                parent.saveData();
+            }
+            
         }
     }
 }

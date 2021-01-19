@@ -27,6 +27,7 @@ namespace imageLabeler
         public bool IsFreePointerPressed = false;
         private bool isPointerPressed = false;
         public ObjectBoundsControl obc;
+        public SortedSet<string> classes;
         private int sampleDataIndex = 0;
         private int dataSize;
         private List<SampleData> sampleList;
@@ -34,10 +35,13 @@ namespace imageLabeler
         private int currentBitmapWidth;
         private int currentBitmapHeight;
         private double shrinkRatio = 1;
-        public WorkSpaceControl(ref List<SampleData> sampleDataList)
+
+       
+        public WorkSpaceControl(ref List<SampleData> sampleDataList, ref SortedSet<string> classList)
         {
             this.InitializeComponent();
             sampleList = sampleDataList;
+            classes = classList;
             dataSize = sampleDataList.Count;
             NewSample();
         }

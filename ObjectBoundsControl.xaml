@@ -8,7 +8,6 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-
     <Canvas>
         <Rectangle x:Name="rootVertex"
                  Width="{x:Bind r}"
@@ -24,8 +23,9 @@
         <Rectangle x:Name="box" 
                    Canvas.Left="0"
                    Canvas.Top="0"
-                   StrokeDashArray="1 6"
+                   
                    Stroke="Red"></Rectangle>
+        <!--StrokeDashArray="1 6"-->
         <Rectangle x:Name="freeVertex"
                  Width="{x:Bind r}"
                  Height="{x:Bind r}"
@@ -39,7 +39,20 @@
         <RelativePanel x:Name="LabelRelativePanel"
                        Height="20"
                        Width="60">
-            <TextBox x:Name="LabelTextBox"
+            <AutoSuggestBox x:Name="LabelTextBox"
+                     Background="white"
+                     Foreground="Black"
+                   Width="80"
+                   Height="36"
+                   Text="hello"
+                     VerticalContentAlignment="Center"
+                     VerticalAlignment="Center"
+                     RelativePanel.AlignVerticalCenterWithPanel="True"
+                 TextChanged="LabelTextBox_TextChanged"
+                 SuggestionChosen="LabelTextBox_SuggestionChosen">
+            
+            </AutoSuggestBox>
+            <!--<TextBox x:Name="LabelTextBox"
                      IsColorFontEnabled="False"
                      Background="white"
                      Foreground="black"
@@ -49,7 +62,9 @@
                      VerticalContentAlignment="Center"
                      VerticalAlignment="Center"
                      RelativePanel.AlignVerticalCenterWithPanel="True"
-                 TextChanged="LabelTextBox_TextChanged"></TextBox>
+                 TextChanged="LabelTextBox_TextChanged">
+                
+            </TextBox>-->
             <Button x:Name="DeleteButton"
                     RelativePanel.AlignRightWithPanel="True"
                     RelativePanel.AlignVerticalCenterWithPanel="True"

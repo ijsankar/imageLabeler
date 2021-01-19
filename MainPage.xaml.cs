@@ -27,15 +27,19 @@ namespace imageLabeler
     public sealed partial class MainPage : Page
     {
         public List<SampleData> SampleList;
+        public SortedSet<string> ClassList;
         bool isDrawMode = true;
         int pointsCount = 4;
         StorageFolder dataFolder;
         StorageFile CSVFile;
         StorageFile newCSVFile;
+        
+        
         public MainPage()
         {
             this.InitializeComponent();
             SampleList = new List<SampleData>();
+            ClassList = new SortedSet<string>();
         }
 
         private async void browseButton_Click(object sender, RoutedEventArgs e)
@@ -61,7 +65,7 @@ namespace imageLabeler
             {
                 MainGrid.Children.Remove(wsc);
             }
-            var w = new WorkSpaceControl(ref SampleList);
+            var w = new WorkSpaceControl(ref SampleList , ref ClassList);
             MainGrid.Children.Add(w);
             Grid.SetRow(w, 1);
             SaveButton.IsEnabled = true;
@@ -102,6 +106,7 @@ namespace imageLabeler
                 {
                     var x = sample.Split(",");
                     l.Add(Tuple.Create(double.Parse(x[1]), double.Parse(x[2]), double.Parse(x[3]), double.Parse(x[4]),x[5]));
+                    ClassList.Add(x[5]);
                 } 
             }
             CSVReader.Close();
